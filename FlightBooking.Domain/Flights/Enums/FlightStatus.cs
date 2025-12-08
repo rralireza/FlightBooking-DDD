@@ -2,8 +2,10 @@
 
 public enum FlightStatus : short
 {
-    Scheduled = 1,
-    Delayed = 2,
-    Cancelled = 3,
-    Completed = 4
+    Scheduled = 0,
+    Delayed = 1,
+    Cancelled = 2,
+    Departed = 3,
+    Arrived = 4,
+    Completed = 5
 }
