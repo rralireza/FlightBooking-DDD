@@ -4,7 +4,7 @@ namespace FlightBooking.Domain.Airports;
 
 public sealed class Airport : Entity<int>
 {
-    private Airport(int id, IataCode iataCode, Name name, City city, bool isInternational) : base(id)
+    private Airport(int id, AirportIataCode iataCode, Name name, City city, bool isInternational) : base(id)
     {
         IataCode = iataCode;
         Name = name;
@@ -12,7 +12,9 @@ public sealed class Airport : Entity<int>
         IsInternational = isInternational;
     }
 
-    public IataCode IataCode { get; private set; }
+    private Airport() { }
+
+    public AirportIataCode IataCode { get; private set; }
 
     public Name Name { get; private set; }
 
@@ -20,7 +22,7 @@ public sealed class Airport : Entity<int>
 
     public bool IsInternational { get; private set; }
 
-    public static Airport Create(int id, IataCode iataCode, Name name, City city, bool isInternational)
+    public static Airport Create(int id, AirportIataCode iataCode, Name name, City city, bool isInternational)
     {
         if (id is 0) throw new ArgumentNullException($"{nameof(id)} can not be zero.");
 
