@@ -102,4 +102,8 @@ public sealed class Flight : Entity<long>
                           duration,
                           flightDurationInMinutes);
     }
+
+    public void Activate() => IsActive = true;
+
+    public void Deactivate() => IsActive = false;
 }
