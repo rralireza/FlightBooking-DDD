@@ -1,5 +1,7 @@
 ﻿using FlightBooking.Domain.Abstractions;
+using FlightBooking.Domain.Airports;
 using FlightBooking.Domain.Flights.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FlightBooking.Domain.Flights;
 
@@ -57,6 +59,12 @@ public sealed class Flight : Entity<long>
     public int FlightDurationInMinutes { get; private set; }
 
     public bool IsActive { get; private set; } = true;
+
+    [ForeignKey(nameof(OriginAirportId))]
+    public Airport OriginAirport { get; private set; } = null!;
+
+    [ForeignKey(nameof(DestinationAirportId))]
+    public Airport DestinationAirport { get; private set; } = null!;
 
     /// <summary>
     /// Factory method to create a Flight instance
