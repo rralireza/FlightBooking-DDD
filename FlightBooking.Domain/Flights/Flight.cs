@@ -1,6 +1,7 @@
 ﻿using FlightBooking.Domain.Abstractions;
 using FlightBooking.Domain.Airports;
 using FlightBooking.Domain.Flights.Enums;
+using FlightBooking.Domain.Seats;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FlightBooking.Domain.Flights;
@@ -66,6 +67,9 @@ public sealed class Flight : Entity<long>
     [ForeignKey(nameof(DestinationAirportId))]
     public Airport DestinationAirport { get; private set; } = null!;
 
+    private readonly List<Seat> _seats = new();
+    public IReadOnlyCollection<Seat> Seats => _seats.AsReadOnly();
+
     /// <summary>
     /// Factory method to create a Flight instance
     /// </summary>
@@ -106,4 +110,14 @@ public sealed class Flight : Entity<long>
     public void Activate() => IsActive = true;
 
     public void Deactivate() => IsActive = false;
+
+    internal void AddSeat(Seat seat)
+    {
+        if (seat is null) throw new ArgumentNullException(nameof(seat));
+
+        if (seat.FlightId != Id)
+            throw new InvalidOperationException("Seat does not belong to this flight.");
+
+        _seats.Add(seat);
+    }
 }
