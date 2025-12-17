@@ -32,4 +32,38 @@ public sealed class Seat : Entity<long>
 
     [ForeignKey(nameof(FlightId))]
     public Flight Flight { get; private set; } = null!;
+
+    internal void ReserveTemporarily(DateTime expiresAt)
+    {
+        if (Status != SeatStatus.Available)
+            throw new InvalidOperationException($"Seat {SeatNumber} is not available for reservation.");
+
+        Status = SeatStatus.TemorarilyReserved;
+        ReservedUntil = expiresAt;
+    }
+
+    internal void Release()
+    {
+        Status = SeatStatus.Available;
+        ReservedUntil = null;
+    }
+
+    internal void ReservePermanently()
+    {
+        Status = SeatStatus.PermanentlyReserved;
+        ReservedUntil = null;
+    }
+
+    internal void Blocked() => Status = SeatStatus.Blocked;
+
+    public static Seat Create(long id, string seatNumber, SeatClass seatClass, decimal price, long flightId)
+    {
+        if (string.IsNullOrWhiteSpace(seatNumber))
+            throw new ApplicationException("Seat number cannot be empty!");
+
+        if (price < 0)
+            throw new ApplicationException("Price cannot be negative!");
+
+        return new Seat(id, seatNumber, seatClass, price, flightId);
+    }
 }
